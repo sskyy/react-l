@@ -44,3 +44,11 @@ export function zip( keys, values ){
 export function keys( obj ){
   return Object.keys(obj)
 }
+
+export function pick( obj, keys, ignoreUndefined ){
+  const result  = {}
+  keys.forEach(key=>{
+    if( !ignoreUndefined || obj[key] !== undefined ) result[key] = obj[key]
+  })
+  return result
+}

@@ -1,6 +1,9 @@
 import React from 'react'
 
 const Box = React.createClass({
+  componentDidMount(){
+    debugger
+  },
   render(){
     return (
       <div style={{ background:this.props.color || 'gray',  display:'inline-block', padding:'25px',color:'#fff',textAlign:'center' }}>
