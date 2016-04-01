@@ -1,11 +1,10 @@
 import assign from 'object-assign'
+import {Strategy, andProps} from '../Strategy'
 
 
-export default function direction( context ){
-  if( context.props.vertical === true){
+export default new Strategy(function direction( context ){
     context.style.set({
-      display: 'flex',
+      display: 'inline-flex',
       flexDirection : 'column'
     })
-  }
-}
+}, andProps('vertical'))

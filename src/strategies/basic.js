@@ -1,5 +1,8 @@
 import assign from 'object-assign'
 
 export default function basic( context ){
-  context.childrenStyle.forEach(style=>style.set({display:'inline-block'}))
+  context.style.set({
+    display: 'inline-flex',
+    width:'100%'
+  })
 }

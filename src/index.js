@@ -12,16 +12,22 @@ import whiteSpace from './strategies/whiteSpace'
 import Style from './Style'
 import {forEach} from './util'
 import size from './strategies/size'
-//import position from './strategies/position'
-//import childrenSize from './strategies/childrenSize'
+import children from './strategies/children'
+import display from './strategies/display'
+import grow from './strategies/grow'
+import {Strategies} from './Strategy'
 
 // strategy may have dependencies
-const strategies = {basic,  direction, whiteSpace, debug, size}
 
-const L  = React.createClass({
+class L  extends React.Component{
+  constructor(){
+    super()
+    this.strategies = new Strategies({basic,  debug, direction, whiteSpace,  size, display, children, grow})
+  }
   render(){
     const props = this.props
-    const children = props.children
+    const isChildrenArray = Array.isArray(props.children)
+    const children = isChildrenArray ? props.children:[props.children]
 
     const context = {
       props, children,
@@ -29,24 +35,32 @@ const L  = React.createClass({
       childrenStyle:Array(children.length).fill(1).map(()=>new Style)
     }
 
-    forEach(strategies, (strategy, name)=> {
+    this.strategies.forEachMatch((strategy, name)=> {
       context.style.open(name)
       context.childrenStyle.forEach(style=>style.open(name))
-      strategy(context)
+      strategy.apply(context, L, this.strategies)
       context.childrenStyle.forEach(style=>style.close())
       context.style.close()
+      console.info("applying====>", name)
+    }, context)
+
+    // TODO we use isChildrenSingle to quick fix height !00%
+    const childrenNodes = context.children.map((child, i)=> {
+      return child.type === L  || this.props.childWrapper ===true ?
+        child :
+        (
+          <div key={i} style={context.childrenStyle[i].generate()}>
+            {child}
+          </div>
+        )
     })
 
-
-    // TODO debug mode
     return (
       <div style={context.style.generate()}>
-        {context.children.map((child, i)=>(
-          <div key={i} style={context.childrenStyle[i].generate()}>{React.cloneElement(child)}</div>
-        ))}
+        {childrenNodes}
       </div>
     )
   }
-})
+}
 
 export default L

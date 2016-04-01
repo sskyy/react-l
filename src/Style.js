@@ -8,7 +8,6 @@ export default class Style{
     this.operator  = null
   }
   open( operator ){
-    console.log( operator)
     this.checkOperatorConflict(true)
     this.operator = operator
   }
@@ -37,15 +36,15 @@ export default class Style{
     }else{
 
       if(this.data[key] !== value){
-        console.warn(`You are changing  ${key} from ${this.data[key]} set by  ${this.data[key].history[this.data[key].history.length-1].operator} to ${value}`)
-      }else{
-        this.data[key] = {
-          value,
-          history : this.data[key].history.concat({
-            value : value,
-            operator: this.operator,
-          })
-        }
+        console.warn(`You are changing  ${key} from ${this.data[key].value} set by  ${this.data[key].history[this.data[key].history.length-1].operator} to ${value}`)
+      }
+
+      this.data[key] = {
+        value,
+        history : this.data[key].history.concat({
+          value : value,
+          operator: this.operator,
+        })
       }
 
     }
